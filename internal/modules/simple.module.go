@@ -6,13 +6,13 @@ import (
 	"strconv"
 )
 
-type SimpleModule struct {}
+type simpleModuleImpl struct{}
 
-func NewSimpleModule() *SimpleModule {
-	return &SimpleModule{}
+func NewSimpleModule() Module {
+	return &simpleModuleImpl{}
 }
 
-func (sm *SimpleModule) FindAvgFromfile(filename string) (float64, error) {
+func (sm *simpleModuleImpl) FindAvgFromfile(filename string) (float64, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return 0, err
