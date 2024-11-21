@@ -22,7 +22,7 @@ func readInput(reader *bufio.Reader) int {
 	input := strings.Replace(inputText, "\n", "", -1)
 	jobsNum, err := strconv.ParseInt(input, 10, 64)
 	if err != nil {
-		fmt.Print("Please enter integer")
+		fmt.Print("The input must be an integer\n")
 		return readInput(reader)
 	}
 
