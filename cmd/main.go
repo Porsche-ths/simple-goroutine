@@ -50,4 +50,10 @@ func main() {
 	if channelErr != nil {
 		log.Fatalf("Error: %s", channelErr)
 	}
+
+	workerPoolModule := modules.NewWorkerPoolModule()
+	workerPoolErr := workerPoolModule.FindAvgFromFile("./files/data.csv", jobsNum)
+	if workerPoolErr != nil {
+		log.Fatalf("Error: %s", workerPoolErr)
+	}
 }
