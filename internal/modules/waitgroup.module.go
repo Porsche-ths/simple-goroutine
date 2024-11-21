@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
-	"strconv"
 	"sync"
 	"time"
 )
@@ -36,19 +35,10 @@ func (wgm *waitGroupModuleImpl) FindAvgFromFile(filename string, jobsNum int) er
 	sumArr := make([]float64, jobsNum)
 	for i := range jobsNum {
 		wg.Add(1)
-		go func(sumArr *[]float64, err *error) {
+		go func() {
 			defer wg.Done()
-			sum := 0.0
-			for _, record := range records[i*n : (i+1)*n] {
-				value, parseErr := strconv.ParseFloat(record[0], 64)
-				if parseErr != nil {
-					*err = parseErr
-					return
-				}
-				sum += value
-			}
-			(*sumArr)[i] = sum
-		}(&sumArr, &err)
+			sumArr[i] = calculateSum(records[i*n:(i+1)*n], &err)
+		}()
 	}
 
 	wg.Wait()

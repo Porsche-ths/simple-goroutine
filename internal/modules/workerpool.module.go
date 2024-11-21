@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 )
 
@@ -34,18 +33,9 @@ func (wpm *workerPoolModuleImpl) FindAvgFromFile(filename string, jobsNum int) e
 	jobs := make(chan int, jobsNum)
 	sumArr := make(chan float64, jobsNum)
 	for i := range jobsNum {
-		go func(sumArr *chan float64, err *error) {
-			sum := 0.0
-			for _, record := range records[i*n : (i+1)*n] {
-				value, parseErr := strconv.ParseFloat(record[0], 64)
-				if parseErr != nil {
-					*err = parseErr
-					return
-				}
-				sum += value
-			}
-			(*sumArr) <- sum
-		}(&sumArr, &err)
+		go func() {
+			sumArr <- calculateSum(records[i*n:(i+1)*n], &err)
+		}()
 	}
 
 	if err != nil {
