@@ -14,7 +14,7 @@ func NewChannelModule() Module {
 	return &channelModuleImpl{}
 }
 
-func (wgm *channelModuleImpl) FindAvgFromFile(filename string) error {
+func (wgm *channelModuleImpl) FindAvgFromFile(filename string, jobsNum int) error {
 	start := time.Now()
 
 	file, err := os.Open(filename)
@@ -29,12 +29,12 @@ func (wgm *channelModuleImpl) FindAvgFromFile(filename string) error {
 		return err
 	}
 
-	n := len(records) / 50
+	n := len(records) / jobsNum
 
-	sumArr := [50]chan float64{}
-	for i := range 50 {
+	sumArr := make([]chan float64, jobsNum)
+	for i := range jobsNum {
 		sumArr[i] = make(chan float64)
-		go func(sumArr *[50]chan float64, err *error) {
+		go func(sumArr *[]chan float64, err *error) {
 			sum := 0.0
 			for _, record := range records[i*n : (i+1)*n] {
 				value, parseErr := strconv.ParseFloat(record[0], 64)
@@ -53,7 +53,7 @@ func (wgm *channelModuleImpl) FindAvgFromFile(filename string) error {
 	}
 
 	sum := 0.0
-	for i := range 50 {
+	for i := range jobsNum {
 		sum += <-sumArr[i]
 	}
 

@@ -15,7 +15,7 @@ func NewWaitGroupModule() Module {
 	return &waitGroupModuleImpl{}
 }
 
-func (wgm *waitGroupModuleImpl) FindAvgFromFile(filename string) error {
+func (wgm *waitGroupModuleImpl) FindAvgFromFile(filename string, jobsNum int) error {
 	start := time.Now()
 
 	file, err := os.Open(filename)
@@ -30,13 +30,13 @@ func (wgm *waitGroupModuleImpl) FindAvgFromFile(filename string) error {
 		return err
 	}
 
-	n := len(records) / 50
+	n := len(records) / jobsNum
 
 	wg := sync.WaitGroup{}
-	sumArr := [50]float64{}
-	for i := range 50 {
+	sumArr := make([]float64, jobsNum)
+	for i := range jobsNum {
 		wg.Add(1)
-		go func(sumArr *[50]float64, err *error) {
+		go func(sumArr *[]float64, err *error) {
 			defer wg.Done()
 			sum := 0.0
 			for _, record := range records[i*n : (i+1)*n] {
@@ -58,7 +58,7 @@ func (wgm *waitGroupModuleImpl) FindAvgFromFile(filename string) error {
 	}
 
 	sum := 0.0
-	for i := range 50 {
+	for i := range jobsNum {
 		sum += sumArr[i]
 	}
 

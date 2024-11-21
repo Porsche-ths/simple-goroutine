@@ -14,7 +14,7 @@ func NewSimpleModule() Module {
 	return &simpleModuleImpl{}
 }
 
-func (sm *simpleModuleImpl) FindAvgFromFile(filename string) error {
+func (sm *simpleModuleImpl) FindAvgFromFile(filename string, jobsNum int) error {
 	start := time.Now()
 
 	file, err := os.Open(filename)
@@ -29,11 +29,11 @@ func (sm *simpleModuleImpl) FindAvgFromFile(filename string) error {
 		return err
 	}
 
-	n := len(records) / 50
+	n := len(records) / jobsNum
 
-	sumArr := [50]float64{}
-	for i := range 50 {
-		func(sumArr *[50]float64, err *error) {
+	sumArr := make([]float64, jobsNum)
+	for i := range jobsNum {
+		func(sumArr *[]float64, err *error) {
 			sum := 0.0
 			for _, record := range records[i*n : (i+1)*n] {
 				value, parseErr := strconv.ParseFloat(record[0], 64)
@@ -52,7 +52,7 @@ func (sm *simpleModuleImpl) FindAvgFromFile(filename string) error {
 	}
 
 	sum := 0.0
-	for i := range 50 {
+	for i := range jobsNum {
 		sum += sumArr[i]
 	}
 
