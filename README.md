@@ -4,14 +4,30 @@ Welcome to **Simple Goroutines**, a personal project for learning and experiment
 
 ## Description
 
-Goroutines are lightweight threads managed by the Go runtime, designed to optimize business logic through concurrent programming. The main goal of this repository is to read random float values from a generated `.csv` file containing 1,000 rows and compute their average.
+### Overview
 
-This project includes four modules, each implementing the same calculation method to compare execution times across different Goroutines approaches:
+Goroutines are lightweight threads managed by the Go runtime, designed to optimize business logic through concurrent programming. This repository demonstrates how Goroutines can be used to optimize the processing of a .csv file containing 1,000 random float values by computing their average.
 
-1. **Simple Module**: Average calculation without using Goroutines.
-2. **Wait Group Module**: Implements Goroutines using a wait group style.
-3. **Channel Module**: Uses channels to implement Goroutines.
-4. **Worker Pool Module**: Implements Goroutines with a worker pool style.
+### Calculation
+
+- **Brute Force**
+    Iterates through all rows in the file sequentially to calculate the average value.
+
+- **Concurrent Algorithm (4 Modules)**
+    Splits the 1,000 rows into `n` equal parts, calculates the sum of each part concurrently, and then combines the partial sums to compute the final average.
+
+### Modules
+
+This project features four modules, each using a different approach to calculate the average, enabling a comparison of execution times:
+
+1. **Simple Module**:  
+    Computes the average sequentially without using Goroutines.
+2. **Wait Group Module**:  
+    Implements Goroutines using the WaitGroup mechanism to synchronize concurrent tasks.
+3. **Channel Module**:  
+    Utilizes Go channels to implement Goroutines and manage concurrent communication.
+4. **Worker Pool Module**:  
+    Uses a worker pool pattern to process rows concurrently with Goroutines.
 
 ## Getting Started
 
