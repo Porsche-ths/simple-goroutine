@@ -33,6 +33,12 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	jobsNum := readInput(reader)
 
+	bruteForceModule := modules.NewBruteForceModule()
+	bruteForceErr := bruteForceModule.FindAvgFromFile("./files/data.csv", jobsNum)
+	if bruteForceErr != nil {
+		log.Fatalf("Error: %s", bruteForceErr)
+	}
+
 	simpleModule := modules.NewSimpleModule()
 	simpleErr := simpleModule.FindAvgFromFile("./files/data.csv", jobsNum)
 	if simpleErr != nil {
