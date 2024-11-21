@@ -1,5 +1,5 @@
 package modules
 
 type Module interface {
-	FindAvgFromfile(filename string) (float64, error)
+	FindAvgFromFile(filename string) error
 }
