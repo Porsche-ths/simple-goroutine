@@ -55,7 +55,7 @@ func (wpm *workerPoolModuleImpl) FindAvgFromFile(filename string, jobsNum int) e
 	elapsed := time.Since(start)
 
 	fmt.Println(fmt.Sprintf("\nWorker Pool module average: %f", sum/float64(len(records))))
-	fmt.Println(fmt.Sprintf("Worker Pool module read 1000 rows of CSV file took %s", elapsed))
+	fmt.Println(fmt.Sprintf("Worker Pool module read 10M rows of CSV file took %s", elapsed))
 
 	return nil
 }

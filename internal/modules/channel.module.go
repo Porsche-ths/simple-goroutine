@@ -49,7 +49,7 @@ func (wgm *channelModuleImpl) FindAvgFromFile(filename string, jobsNum int) erro
 	elapsed := time.Since(start)
 
 	fmt.Println(fmt.Sprintf("\nChannel module average: %f", sum/float64(len(records))))
-	fmt.Println(fmt.Sprintf("Channel module read 1000 rows of CSV file took %s", elapsed))
+	fmt.Println(fmt.Sprintf("Channel module read 10M rows of CSV file took %s", elapsed))
 
 	return nil
 }
