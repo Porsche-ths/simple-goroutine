@@ -32,11 +32,13 @@ func (wpm *workerPoolModuleImpl) FindAvgFromFile(filename string, jobsNum int) e
 
 	jobs := make(chan int, jobsNum)
 	result := make(chan float64, jobsNum)
-	for i := range jobsNum {
-		go func() {
-			result <- calculateSum(records[i*n:(i+1)*n], &err)
-		}()
-	}
+	go func() { // worker function
+		for i := range jobs {
+			go func() {
+				result <- calculateSum(records[i*n:(i+1)*n], &err)
+			}()
+		}
+	}()
 
 	if err != nil {
 		return err

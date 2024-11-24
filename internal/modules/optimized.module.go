@@ -15,7 +15,7 @@ func NewOptimizedModule() Module {
 	return &optimizedModuleImpl{}
 }
 
-func readAndSum(reader *csv.Reader, returnErr *error) float64 {
+func readAndSum(reader *csv.Reader, rowCount *float64, returnErr *error) float64 {
 	sum := 0.0
 	for {
 		row, err := reader.Read()
@@ -33,14 +33,15 @@ func readAndSum(reader *csv.Reader, returnErr *error) float64 {
 			*returnErr = err
 			break
 		}
+		*rowCount++
 		sum += value
 	}
 	return sum
 }
 
-func worker(jobsNum int, result chan<- float64, reader *csv.Reader, returnErr *error) {
+func optimizedWorker(jobsNum int, result chan<- float64, reader *csv.Reader, rowCount *float64, returnErr *error) {
 	for i := 0; i < jobsNum; i++ {
-		result <- readAndSum(reader, returnErr)
+		result <- readAndSum(reader, rowCount, returnErr)
 	}
 }
 
@@ -55,10 +56,11 @@ func (om *optimizedModuleImpl) FindAvgFromFile(filename string, jobsNum int) err
 
 	reader := csv.NewReader(file)
 
+	rowCount := 0.0
 	jobs := make(chan int, jobsNum)
 	result := make(chan float64, jobsNum)
 
-	go worker(jobsNum, result, reader, &err)
+	go optimizedWorker(jobsNum, result, reader, &rowCount, &err)
 	if err != nil {
 		return err
 	}
@@ -76,7 +78,7 @@ func (om *optimizedModuleImpl) FindAvgFromFile(filename string, jobsNum int) err
 
 	elapsed := time.Since(start)
 
-	fmt.Println(fmt.Sprintf("\nOptimized module average: %f", sum/50000000.0))
+	fmt.Println(fmt.Sprintf("\nOptimized module average: %f", sum/rowCount))
 	fmt.Println(fmt.Sprintf("Optimized module read 50M rows of CSV file took %s", elapsed))
 
 	return nil
