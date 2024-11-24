@@ -37,7 +37,7 @@ func (bfm *bruteForceModuleImpl) FindAvgFromFile(filename string, jobsNum int) e
 	elapsed := time.Since(start)
 
 	fmt.Println(fmt.Sprintf("\nBrute Force module average: %f", sum/float64(len(records))))
-	fmt.Println(fmt.Sprintf("Brute Force module read 10M rows of CSV file took %s", elapsed))
+	fmt.Println(fmt.Sprintf("Brute Force module read 50M rows of CSV file took %s", elapsed))
 
 	return nil
 }

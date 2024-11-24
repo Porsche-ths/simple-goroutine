@@ -30,10 +30,10 @@ func (wgm *channelModuleImpl) FindAvgFromFile(filename string, jobsNum int) erro
 
 	n := len(records) / jobsNum
 
-	sumArr := make(chan float64, jobsNum)
+	result := make(chan float64, jobsNum)
 	for i := range jobsNum {
 		go func() {
-			sumArr <- calculateSum(records[i*n:(i+1)*n], &err)
+			result <- calculateSum(records[i*n:(i+1)*n], &err)
 		}()
 	}
 
@@ -43,13 +43,13 @@ func (wgm *channelModuleImpl) FindAvgFromFile(filename string, jobsNum int) erro
 
 	sum := 0.0
 	for i := 0; i < jobsNum; i++ {
-		sum += <-sumArr
+		sum += <-result
 	}
 
 	elapsed := time.Since(start)
 
 	fmt.Println(fmt.Sprintf("\nChannel module average: %f", sum/float64(len(records))))
-	fmt.Println(fmt.Sprintf("Channel module read 10M rows of CSV file took %s", elapsed))
+	fmt.Println(fmt.Sprintf("Channel module read 50M rows of CSV file took %s", elapsed))
 
 	return nil
 }

@@ -31,10 +31,10 @@ func (wpm *workerPoolModuleImpl) FindAvgFromFile(filename string, jobsNum int) e
 	n := len(records) / jobsNum
 
 	jobs := make(chan int, jobsNum)
-	sumArr := make(chan float64, jobsNum)
+	result := make(chan float64, jobsNum)
 	for i := range jobsNum {
 		go func() {
-			sumArr <- calculateSum(records[i*n:(i+1)*n], &err)
+			result <- calculateSum(records[i*n:(i+1)*n], &err)
 		}()
 	}
 
@@ -49,13 +49,13 @@ func (wpm *workerPoolModuleImpl) FindAvgFromFile(filename string, jobsNum int) e
 
 	sum := 0.0
 	for i := 0; i < jobsNum; i++ {
-		sum += <-sumArr
+		sum += <-result
 	}
 
 	elapsed := time.Since(start)
 
 	fmt.Println(fmt.Sprintf("\nWorker Pool module average: %f", sum/float64(len(records))))
-	fmt.Println(fmt.Sprintf("Worker Pool module read 10M rows of CSV file took %s", elapsed))
+	fmt.Println(fmt.Sprintf("Worker Pool module read 50M rows of CSV file took %s", elapsed))
 
 	return nil
 }
