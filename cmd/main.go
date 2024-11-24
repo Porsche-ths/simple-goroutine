@@ -62,4 +62,10 @@ func main() {
 	if workerPoolErr != nil {
 		log.Fatalf("Error: %s", workerPoolErr)
 	}
+
+	optimizedModule := modules.NewOptimizedModule()
+	optimizedErr := optimizedModule.FindAvgFromFile("./files/data.csv", jobsNum)
+	if optimizedErr != nil {
+		log.Fatalf("Error: %s", optimizedErr)
+	}
 }
