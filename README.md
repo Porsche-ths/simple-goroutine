@@ -14,7 +14,7 @@ Goroutines are lightweight threads managed by the Go runtime, designed to optimi
     Iterates through all rows in the file sequentially to calculate the average value.
 
 - **Concurrent Algorithm (4 Modules)**
-    Splits the 1,000 rows into `n` equal parts, calculates the sum of each part concurrently, and then combines the partial sums to compute the final average.
+    Splits the 50M rows into `n` equal parts, calculates the sum of each part concurrently, and then combines the partial sums to compute the final average.
 
 ### Modules
 
@@ -34,7 +34,7 @@ This project features four modules, each using a different approach to calculate
 Follow the steps below to run the project:
 
 1. **Generate the `data.csv` file**:  
-    Run the Python script to create a `.csv` file with 1,000 random float values.
+    Run the Python script to create a `.csv` file with 50M random float values.
 
     ```bash
     python "./fileGenerator.py"
@@ -48,7 +48,7 @@ Follow the steps below to run the project:
     ```
 
 3. **Input the number of jobs**:  
-    After running the program, enter the number of jobs to divide the 1,000 rows equally. Each Goroutine will process a portion of the rows in parallel. The prompt will look like this:
+    After running the program, enter the number of jobs to divide the 50M rows equally. Each Goroutine will process a portion of the rows in parallel. The prompt will look like this:
 
     ```bash
     Enter Jobs Number: 
