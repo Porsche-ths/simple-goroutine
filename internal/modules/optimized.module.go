@@ -17,6 +17,7 @@ func NewOptimizedModule() Module {
 
 func readAndSum(reader *csv.Reader, rowCount *float64, returnErr *error) float64 {
 	sum := 0.0
+
 	for {
 		row, err := reader.Read()
 		if err != nil {
@@ -36,6 +37,7 @@ func readAndSum(reader *csv.Reader, rowCount *float64, returnErr *error) float64
 		*rowCount++
 		sum += value
 	}
+
 	return sum
 }
 
